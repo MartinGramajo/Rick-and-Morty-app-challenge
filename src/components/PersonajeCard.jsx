@@ -21,12 +21,12 @@ export default function PersonajeCard({ data }) {
         </Card.Text>
       </Card.Body>
       <Card.Footer className="border-0">
-        {/* <div className="personaje-footer">
+        <div className="personaje-footer">
           <div className="estado efecto-blur-card text-white p-2">
-            <span className={props.status}></span>
-            <p className="fs-6 my-1">{props.status}</p>
+            <span className={status}></span>
+            <p className="fs-6 my-1">{status}</p>
           </div>
-        </div> */}
+        </div>
       </Card.Footer>
     </Card>
   );
