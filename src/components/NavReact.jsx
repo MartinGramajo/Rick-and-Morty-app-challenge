@@ -1,11 +1,18 @@
-import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { Container, Nav, Navbar, NavDropdown,Image } from "react-bootstrap";
 
 export default function NavReact() {
   return (
       <div>
-           <Navbar bg="dark" variant="dark" expand="lg">
+        <Navbar className="nav" bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+          <Navbar.Brand href="/">
+          <Image
+              className="logo-navbar"
+              src="https://res.cloudinary.com/dtbfspso5/image/upload/v1651778966/rick%20and%20morty/Rick-And-Morty-Logo_rdwvrn.png"
+              fluid
+              alt="Logo"
+            />
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
