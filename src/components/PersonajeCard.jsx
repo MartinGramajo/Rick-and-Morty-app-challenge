@@ -1,12 +1,39 @@
-import React from "react";
-import { Button, Card } from "react-bootstrap";
+import React, { useContext, useEffect, useState } from "react";
+import { Button, Card, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { FavoritesContext } from "../context/FavoritesContext";
+import favorite from "../assets/img/starEmpty.svg";
+import Notfavorite from "../assets/img/starFilled.svg";
 
 export default function PersonajeCard({ data }) {
-    const {id,image, name, species,status} = data
+  const {favorites,onClick, chequear, deleteFavorite} = useContext(FavoritesContext)
+  const { id, image, name, species, status } = data
+  const [chequeado, setChequeado] = useState(false);
+
+
+  // usamos useEffect para renderizar
+  useEffect(() => {
+    setChequeado(
+      chequear(id) 
+    );
+  }, [favorites]);
+
   return (
     <Card className="mx-2 my-2 border-5 card-personajes card-personajes-width paytone-one">
-      <Card.Header></Card.Header>
+      <Card.Header className="d-flex justify-content-end">
+      <div>
+          <Button
+            aria-controls="example-collapse-text"
+            className="boton-favorite"
+            variant="outline-light"
+              onClick={
+                chequeado === false ? () => onClick(id) : () => deleteFavorite(id)
+              }
+            >
+              {chequeado === false ? <Image className="star-favorite" src={favorite} alt="logoFooter" fluid /> : <Image  className="star-not-favorite" src={Notfavorite} alt="logoFooter" fluid />}
+            </Button>
+        </div>
+      </Card.Header>
       <Card.Img className="border-card-image" src={image} alt="imagen card" />
       <Card.Body className="text-center text-white efecto-blur-card mt-3">
         <Card.Title>{name}</Card.Title>
