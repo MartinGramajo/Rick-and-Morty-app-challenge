@@ -3,22 +3,31 @@ import Home from './pages/Home';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import PersonajePageDetalle from './pages/PersonajePageDetalle';
 import NavReact from './components/NavReact';
-import { useState } from 'react';
 import Footer from './components/Footer';
+import Favorites from './pages/Favorites';
+import { useContext, useState } from 'react';
+import { FavoritesContext } from './context/FavoritesContext';
+
 
 function App() {
   const [loading, setLoading] = useState(false);
+  const {favorites} = useContext(FavoritesContext)
+  
+
   return (
-    <BrowserRouter>
-      <NavReact />
-      <Routes>
-        <Route
-          path="/"
-          element={<Home loading={loading} setLoading={setLoading} />} />
+    <div className="d-flex flex-column" style={{ minHeight: "100vh" }}>
+      <BrowserRouter>
+        <NavReact favorites={favorites} />
+        <Routes>
+          <Route
+            path="/"
+            element={<Home loading={loading} setLoading={setLoading} />} />
           <Route path="/character/:id" element={<PersonajePageDetalle loading={loading} />} />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
+          <Route path="/Favorites" element={<Favorites />} />
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </div>
   );
 }
 
