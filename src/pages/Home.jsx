@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import PersonajeCard from "../components/PersonajeCard";
-import { Col, Button } from "react-bootstrap";
+import { Col, Button,Spinner  } from "react-bootstrap";
 
-export default function Home() {
+export default function Home({ loading, setLoading}) {
   const [allData, setAllData] = useState([]);
-  const [page, setPage] = useState(1);
+    const [page, setPage] = useState(1);
+    
 
   const isAnteriorDisabled = page === 1;
   const isSiguienteDisabled = allData.length === 0;
@@ -14,7 +15,8 @@ export default function Home() {
     setPage(page - 1);
   };
 
-  useEffect(() => {
+    useEffect(() => {
+        setLoading(true);
     const request = async () => {
       try {
         let promises = [];
@@ -40,7 +42,8 @@ export default function Home() {
           arrayCharacters.push(response);
         }
 
-        setAllData(arrayCharacters);
+          setAllData(arrayCharacters);
+          setLoading(false);
       } catch (error) {
         console.error(error);
         alert("hubo un error en la conexión al servidor de newsApi");
@@ -51,39 +54,47 @@ export default function Home() {
 
   // Paginado Local
   const limit = 15;
-  const inicial = 1 + page * limit - limit;
+  const inicial = 0 + page * limit - limit;
   const last = inicial + limit;
   const newsPaginate = allData.slice(inicial, last);
 
-  // mapeo de los character
+  // mapeo character
   const mapCharacter = newsPaginate.map((data, id) => (
     <PersonajeCard data={data} />
   ));
 
   return (
-    <div>
-      <div
-        className="container d-flex flex-wrap justify-content-center mt-5"
-        as={Col}
-        md="4"
-      >
-        {mapCharacter}
-      </div>
-      <div className="d-flex justify-content-center">
-        <Button onClick={clickPagina} disabled={isAnteriorDisabled}>
-          Anterior
-        </Button>
+    <>
+      {loading ? (
+        <div className="my-5 text-white spiner d-flex justify-content-center my-5 p-5">
+          <Spinner className="fs-1" animation="border" role="status"></Spinner>
+        </div>
+      ) : (
+        <div>
+          <div
+            className="container d-flex flex-wrap justify-content-center mt-5"
+            as={Col}
+            md="4"
+          >
+            {mapCharacter}
+          </div>
+          <div className="d-flex justify-content-center">
+            <Button onClick={clickPagina} disabled={isAnteriorDisabled}>
+              Anterior
+            </Button>
 
-        {page}
-        <Button
-          onClick={() => {
-            setPage(page + 1);
-          }}
-          disabled={isSiguienteDisabled}
-        >
-          Siguiente
-        </Button>
-      </div>
-    </div>
+            {page}
+            <Button
+              onClick={() => {
+                setPage(page + 1);
+              }}
+              disabled={isSiguienteDisabled}
+            >
+              Siguiente
+            </Button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
