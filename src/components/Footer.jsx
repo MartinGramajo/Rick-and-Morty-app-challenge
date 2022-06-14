@@ -4,7 +4,7 @@ import logoFooter from "../assets/img/logoFooter.png";
 
 export default function Footer() {
   return (
-    <div className=" text-white footer">
+    <div className=" text-white footer mt-auto">
       <div className="container">
         <div className="d-flex justify-content-center">
           <div className="text-center">
