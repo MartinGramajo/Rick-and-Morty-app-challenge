@@ -1,11 +1,15 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PersonajeCard from "../components/PersonajeCard";
-import { Col, Button, Spinner, Pagination } from "react-bootstrap";
+import { Col, Spinner, Pagination } from "react-bootstrap";
+import { FavoritesContext } from "../context/FavoritesContext";
 
 export default function Home({ loading, setLoading }) {
+
   const [allData, setAllData] = useState([]);
   const [page, setPage] = useState(1);
+  const {setCharacters,setCharactersFavorites} = useContext(FavoritesContext)
+
 
   const isAnteriorDisabled = page === 1;
   const isSiguienteDisabled = allData.length === 0;
@@ -32,6 +36,7 @@ export default function Home({ loading, setLoading }) {
           promises = [...promises, promise];
         }
         const responses = await Promise.all(promises);
+        
 
         let arrayData = [];
         for (let i = 0; i < responses.length; i++) {
@@ -48,10 +53,12 @@ export default function Home({ loading, setLoading }) {
         }
 
         setAllData(arrayCharacters);
+        setCharacters(arrayCharacters)
+        setCharactersFavorites(arrayCharacters)
         setLoading(false);
       } catch (error) {
         console.error(error);
-        alert("hubo un error en la conexión al servidor de newsApi");
+        alert("hubo un error en la conexión al servidor");
       }
     };
     request();
@@ -113,7 +120,11 @@ export default function Home({ loading, setLoading }) {
   ));
 
   return (
-    <>
+      <>
+             <h1 className="text-white text-center my-5 personajes-titulo container border-0 p-1">
+        {" "}
+        Personajes
+      </h1>
       {loading ? (
         <div className="my-5 text-white spiner d-flex justify-content-center my-5 p-5">
           <Spinner className="fs-1" animation="border" role="status"></Spinner>
