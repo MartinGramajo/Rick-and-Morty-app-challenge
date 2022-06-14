@@ -1,3 +1,44 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Bubblegum Sans", cursive;
+  background-image: linear-gradient(to right, #8e2de247, #4a00e066), url("./assets/img/background.png");
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+/*NavBar*/
+.nav {
+  background: rgb(63, 8, 128);
+  background: linear-gradient(
+    90deg,
+    rgba(63, 8, 128, 1) 0%,
+    rgba(11, 0, 66, 1) 35%,
+    rgba(62, 0, 133, 1) 84%,
+    rgba(76, 2, 161, 1) 100%
+  );
+}
+
+.logo-navbar {
+  width: 150px;
+  height: 80px;
+}
+
+/*Personajes-titulo*/
+.personajes-titulo {
+  background: rgb(63, 8, 128);
+  mix-blend-mode: normal;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  box-sizing: border-box;
+  backdrop-filter: blur(30px);
+  border-radius: 50px;
+}
+
 /*Card Personajes*/
 .card-personajes {
   background: rgb(113, 0, 242);
@@ -5,7 +46,7 @@
   border-radius: 10px;
 }
 
-.card-personajes-width{
+.card-personajes-width {
   width: 300px;
 }
 
@@ -35,7 +76,7 @@
   font-size: 2rem;
   justify-content: space-around;
   align-items: center;
-  column-gap: 0.50rem;
+  column-gap: 0.5rem;
 }
 .estado span {
   display: block;
@@ -51,4 +92,44 @@
 }
 .unknown {
   background: #afafaf;
+}
+
+/*Boton detalle card*/
+.boton-color {
+  background-color: rgb(101, 2, 215);
+}
+
+/*background nav-footer */
+.footer {
+  background: rgb(63, 8, 128);
+  background: linear-gradient(
+    90deg,
+    rgba(63, 8, 128, 1) 0%,
+    rgba(11, 0, 66, 1) 35%,
+    rgba(62, 0, 133, 1) 84%,
+    rgba(76, 2, 161, 1) 100%
+  );
+}
+
+/*card-favorite*/
+.boton-favorite {
+  width: 50px !important;
+  background: rgba(13, 1, 250, 0.325);
+  border-color: rgb(113, 0, 242) !important;
+  mix-blend-mode: normal;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  box-sizing: border-box;
+  backdrop-filter: blur(30px);
+}
+
+.star-favorite {
+  width: 30px;
+}
+
+.star-not-favorite {
+  width: 30px;
+}
+
+.boton-delete{
+  background-color:red ;
 }
