@@ -1,38 +1,54 @@
-.App {
+/*Card Personajes*/
+.card-personajes {
+  background: rgb(113, 0, 242);
+  background: linear-gradient(90deg, rgba(113, 0, 242, 1) 0%, rgba(31, 12, 168, 1) 35%, rgba(113, 0, 242, 1) 100%);
+  border-radius: 10px;
+}
+
+.card-personajes-width{
+  width: 300px;
+}
+
+.efecto-blur-card {
+  background: rgba(13, 1, 250, 0.325);
+  mix-blend-mode: normal;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  box-sizing: border-box;
+  backdrop-filter: blur(30px);
+  border-radius: 20px;
+}
+
+.border-card-image {
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+}
+
+.personaje-footer {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+.estado {
+  background: rgba(9, 2, 125, 0.621);
+  display: inline-flex;
+  padding: 5rem 5rem;
+  border-radius: 6rem;
+  font-size: 2rem;
+  justify-content: space-around;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  column-gap: 0.50rem;
 }
-
-.App-link {
-  color: #61dafb;
+.estado span {
+  display: block;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 80%;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Alive {
+  background: #31a703;
+}
+.Dead {
+  background: #d34b4b;
+}
+.unknown {
+  background: #afafaf;
 }
