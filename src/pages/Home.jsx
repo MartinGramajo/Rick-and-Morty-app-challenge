@@ -5,14 +5,23 @@ import { Col, Spinner, Pagination } from "react-bootstrap";
 import { FavoritesContext } from "../context/FavoritesContext";
 
 export default function Home({ loading, setLoading }) {
-
   const [allData, setAllData] = useState([]);
-  const [page, setPage] = useState(1);
-  const {setCharacters,setCharactersFavorites} = useContext(FavoritesContext)
-
+  const [page, setPage] = useState(56);
+  const { setCharacters, setCharactersFavorites } =
+    useContext(FavoritesContext);
 
   const isAnteriorDisabled = page === 1;
   const isSiguienteDisabled = allData.length === 0;
+
+  const firstPage = (e) => {
+    e.preventDefault();
+    setPage(1);
+  };
+
+  const lastPage = (e) => {
+    e.preventDefault();
+    setPage(56);
+  };
 
   const prevPage = (e) => {
     e.preventDefault();
@@ -36,7 +45,6 @@ export default function Home({ loading, setLoading }) {
           promises = [...promises, promise];
         }
         const responses = await Promise.all(promises);
-        
 
         let arrayData = [];
         for (let i = 0; i < responses.length; i++) {
@@ -53,8 +61,8 @@ export default function Home({ loading, setLoading }) {
         }
 
         setAllData(arrayCharacters);
-        setCharacters(arrayCharacters)
-        setCharactersFavorites(arrayCharacters)
+        setCharacters(arrayCharacters);
+        setCharactersFavorites(arrayCharacters);
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -120,9 +128,8 @@ export default function Home({ loading, setLoading }) {
   ));
 
   return (
-      <>
-             <h1 className="text-white text-center my-5 personajes-titulo container border-0 p-1">
-        {" "}
+    <>
+      <h1 className="text-white text-center my-5 personajes-titulo container border-0 p-1">
         Personajes
       </h1>
       {loading ? (
@@ -143,14 +150,21 @@ export default function Home({ loading, setLoading }) {
               <Pagination.Prev
                 onClick={prevPage}
                 disabled={isAnteriorDisabled}
-              />
+                />
+              <Pagination.Item
+                onClick={firstPage}
+                disabled={isAnteriorDisabled}
+              >
+                {" "}
+                {1}
+              </Pagination.Item>
               <Pagination.Ellipsis disabled />
               <Pagination.Item>{page}</Pagination.Item>
-
               <Pagination.Ellipsis disabled />
+              <Pagination.Item onClick={lastPage}> {56}</Pagination.Item>
               <Pagination.Next
                 onClick={nextPage}
-                disabled={isSiguienteDisabled}
+                disabled={page === 56 && true}
               />
             </Pagination>
           </div>
