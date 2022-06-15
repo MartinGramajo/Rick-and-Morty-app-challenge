@@ -7,7 +7,9 @@ import favorite from "../assets/img/starEmpty.svg";
 import Notfavorite from "../assets/img/starFilled.svg";
 
 export default function PersonajeCard({ data }) {
-  const {favorites,onClick, chequear, deleteFavorite} = useContext(FavoritesContext)
+  const { favorites, onClick, chequear, deleteFavorite } = useContext(FavoritesContext)
+  
+
   const { id, image, name, species, status } = data
   const [chequeado, setChequeado] = useState(false);
 

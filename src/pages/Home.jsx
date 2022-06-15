@@ -10,7 +10,10 @@ export default function Home({ loading, setLoading }) {
   const [page, setPage] = useState(1);
   const { setCharacters, setCharactersFavorites } =
     useContext(FavoritesContext);
+  const [locations, setLocations] = useState([]);
+  const [residents, setResidents] = useState([]);
 
+  
   const isPrevDisabled = page === 1;
   const isNextDisabled =  page === 56;
 
@@ -34,6 +37,7 @@ export default function Home({ loading, setLoading }) {
     setPage(page + 1);
   };
 
+  //Characters
   useEffect(() => {
     setLoading(true);
     const request = async () => {
@@ -46,6 +50,7 @@ export default function Home({ loading, setLoading }) {
           promises = [...promises, promise];
         }
         const responses = await Promise.all(promises);
+   
 
         let arrayData = [];
         for (let i = 0; i < responses.length; i++) {
@@ -73,42 +78,51 @@ export default function Home({ loading, setLoading }) {
     request();
   }, [page]);
 
-  //   useEffect(() => {
-  //     setLoading(true);
-  //     const request = async () => {
-  //       try {
-  //         let promises = [];
-  //         for (let i = 1; i <= 42; i++) {
-  //           const promise = axios.get(
-  //             `https://rickandmortyapi.com/api/location/`
-  //           );
-  //           promises = [...promises, promise];
-  //         }
-  //         const responsesLocation = await Promise.all(promises);
 
-  //         let arrayData = [];
-  //         for (let i = 0; i < responsesLocation.length; i++) {
-  //           const response = responsesLocation[i];
-  //           arrayData.push(response.data.results);
-  //         }
+//locations/ residents
+    useEffect(() => {
+      setLoading(true);
+      const request = async () => {
+        try {
+          let promises = [];
+          for (let i = 1; i <= 42; i++) {
+            const promise = axios.get(
+              `https://rickandmortyapi.com/api/location/`
+            );
+            promises = [...promises, promise];
+          }
+          const responsesLocation = await Promise.all(promises);
 
-  //         let arrayLocation = [];
-  //         const arrayDataFlat = arrayData.flat([42]);
-  //         for (let i = 0; i < arrayDataFlat.length; i++) {
-  //           const response = arrayDataFlat[i];
+          let arrayData = [];
+          for (let i = 0; i < responsesLocation.length; i++) {
+            const response = responsesLocation[i];
+            arrayData.push(response.data.results);
+          }
 
-  //           arrayLocation.push(response);
-  //         }
+          let arrayLocation = [];
+          const arrayDataFlat = arrayData.flat([42]);
+          for (let i = 0; i < arrayDataFlat.length; i++) {
+            const response = arrayDataFlat[i];
 
-  //         setLocation(arrayLocation);
-  //         setLoading(false);
-  //       } catch (error) {
-  //         console.error(error);
-  //         alert("hubo un error en la conexión al servidor de newsApi");
-  //       }
-  //     };
-  //     request();
-  //   }, []);
+            arrayLocation.push(response.residents); //si quito el residents tengo el array de locations. 
+          }
+
+          let arrayResidents = [];
+          const arrayResidentsFlat = arrayLocation.flat([42]);
+          for (let i = 0; i < arrayResidentsFlat.length; i++) {
+            const response = arrayResidentsFlat[i];
+            arrayResidents.push(response);
+          }
+          setResidents(arrayResidents)
+          setLocations(arrayLocation);
+          setLoading(false);
+        } catch (error) {
+          console.error(error);
+          alert("hubo un error en la conexión al servidor de newsApi");
+        }
+      };
+      request();
+    }, []);
 
   // Paginado Local
   const limit = 15;
@@ -116,16 +130,30 @@ export default function Home({ loading, setLoading }) {
   const last = inicial + limit;
   const dataPaginated = allData.slice(inicial, last);
 
-  //   let filtroLocation = [];
-  //   for (let i = 0; i < location.length; i++) {
-  //     const filter = location.filter((data) => data.name === 'Abadango');
-  //     console.log("file: Home.jsx ~ line 102 ~ Home ~ filter ", filter )
 
-  //   }
+    // Paginado Local residents
+    // const limite = 3;
+    // const initial = 0 + page * limite - limite;
+    // const lastCard = initial + limite;
+    // const residentPaginated = residents.slice(initial, lastCard);
 
-  // mapeo character
+  
+    // let filtroLocation = [];
+    // for (let i = 0; i < dataPaginated.length; i++) {
+    //   const filter = dataPaginated.filter((data) => data.location.name);
+    //   filtroLocation.push(filter)
+    // }
+
+  // const mapResidents = residentPaginated.map((data, id) => (
+  //   <PersonajeCard data={data} />
+  // ));
+
+
+  
+  
+  //map character
   const mapCharacter = dataPaginated.map((data, id) => (
-    <PersonajeCard data={data} />
+    <PersonajeCard data={data} id={id} />
   ));
 
   return (
