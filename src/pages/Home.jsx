@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import PersonajeCard from "../components/PersonajeCard";
@@ -6,12 +7,12 @@ import { FavoritesContext } from "../context/FavoritesContext";
 
 export default function Home({ loading, setLoading }) {
   const [allData, setAllData] = useState([]);
-  const [page, setPage] = useState(56);
+  const [page, setPage] = useState(1);
   const { setCharacters, setCharactersFavorites } =
     useContext(FavoritesContext);
 
-  const isAnteriorDisabled = page === 1;
-  const isSiguienteDisabled = allData.length === 0;
+  const isPrevDisabled = page === 1;
+  const isNextDisabled =  page === 56;
 
   const firstPage = (e) => {
     e.preventDefault();
@@ -149,11 +150,11 @@ export default function Home({ loading, setLoading }) {
             <Pagination>
               <Pagination.Prev
                 onClick={prevPage}
-                disabled={isAnteriorDisabled}
+                disabled={isPrevDisabled}
                 />
               <Pagination.Item
                 onClick={firstPage}
-                disabled={isAnteriorDisabled}
+                disabled={isPrevDisabled}
               >
                 {" "}
                 {1}
@@ -164,7 +165,7 @@ export default function Home({ loading, setLoading }) {
               <Pagination.Item onClick={lastPage}> {56}</Pagination.Item>
               <Pagination.Next
                 onClick={nextPage}
-                disabled={page === 56 && true}
+                disabled={isNextDisabled}
               />
             </Pagination>
           </div>

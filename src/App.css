@@ -59,6 +59,7 @@ body {
   border-radius: 20px;
 }
 
+
 .border-card-image {
   border: 1.5px solid rgba(255, 255, 255, 0.3);
   border-radius: 30px;
@@ -72,7 +73,7 @@ body {
   background: rgba(9, 2, 125, 0.621);
   display: inline-flex;
   padding: 5rem 5rem;
-  border-radius: 6rem;
+  border-radius: 1rem;
   font-size: 2rem;
   justify-content: space-around;
   align-items: center;

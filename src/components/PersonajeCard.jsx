@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Card, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -49,7 +50,7 @@ export default function PersonajeCard({ data }) {
       </Card.Body>
       <Card.Footer className="border-0">
         <div className="personaje-footer">
-          <div className="estado efecto-blur-card text-white p-2">
+          <div className="estado  text-white p-2">
             <span className={status}></span>
             <p className="fs-6 my-1">{status}</p>
           </div>
