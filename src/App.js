@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import Favorites from './pages/Favorites';
 import { useContext, useState } from 'react';
 import { FavoritesContext } from './context/FavoritesContext';
+import NotFound from './pages/NotFound';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
             element={<Home loading={loading} setLoading={setLoading} />} />
           <Route path="/character/:id" element={<PersonajePageDetalle loading={loading} />} />
           <Route path="/Favorites" element={<Favorites />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </BrowserRouter>
