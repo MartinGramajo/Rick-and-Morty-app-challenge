@@ -2,7 +2,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import PersonajeCard from "../components/PersonajeCard";
-import { Col, Spinner, Pagination } from "react-bootstrap";
+import { Col, Spinner, Pagination, Form } from "react-bootstrap";
 import { FavoritesContext } from "../context/FavoritesContext";
 
 export default function Home({ loading, setLoading }) {
@@ -10,12 +10,12 @@ export default function Home({ loading, setLoading }) {
   const [page, setPage] = useState(1);
   const { setCharacters, setCharactersFavorites } =
     useContext(FavoritesContext);
-  const [locations, setLocations] = useState([]);
-  const [residents, setResidents] = useState([]);
+  const [allLocations, setAllLocations] = useState([]); // todas  las localizaciones
+  const [locations, setLocations] = useState([]); // array con todas mis localizaciones
+  const [input, setInput] = useState("");
 
-  
   const isPrevDisabled = page === 1;
-  const isNextDisabled =  page === 56;
+  const isNextDisabled = page === 56;
 
   const firstPage = (e) => {
     e.preventDefault();
@@ -50,7 +50,6 @@ export default function Home({ loading, setLoading }) {
           promises = [...promises, promise];
         }
         const responses = await Promise.all(promises);
-   
 
         let arrayData = [];
         for (let i = 0; i < responses.length; i++) {
@@ -76,53 +75,40 @@ export default function Home({ loading, setLoading }) {
       }
     };
     request();
-  }, [page]);
+  }, [page, input]);
+
+  //locations
+  useEffect(() => {
+    const request = async () => {
+      const response = await axios.get(
+        `https://rickandmortyapi.com/api/location`
+      );
+      const locations = response.data.results;
+      setAllLocations(locations);
+    };
+    request();
+  }, []);
+
+  // Armado de array de locations
+  const funcion = () => {
+    let Locations = [];
+    for (let i = 0; i < allLocations.length; i++) {
+      Locations.push(allLocations[i].name);
+    }
+    setLocations(Locations);
+  };
+  useEffect(() => {
+    funcion();
+  }, [allLocations]);
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    const { value } = e.target;
+    const newInput = value;
+    setInput(newInput);
+  };
 
 
-//locations/ residents
-    useEffect(() => {
-      setLoading(true);
-      const request = async () => {
-        try {
-          let promises = [];
-          for (let i = 1; i <= 42; i++) {
-            const promise = axios.get(
-              `https://rickandmortyapi.com/api/location/`
-            );
-            promises = [...promises, promise];
-          }
-          const responsesLocation = await Promise.all(promises);
-
-          let arrayData = [];
-          for (let i = 0; i < responsesLocation.length; i++) {
-            const response = responsesLocation[i];
-            arrayData.push(response.data.results);
-          }
-
-          let arrayLocation = [];
-          const arrayDataFlat = arrayData.flat([42]);
-          for (let i = 0; i < arrayDataFlat.length; i++) {
-            const response = arrayDataFlat[i];
-
-            arrayLocation.push(response.residents); //si quito el residents tengo el array de locations. 
-          }
-
-          let arrayResidents = [];
-          const arrayResidentsFlat = arrayLocation.flat([42]);
-          for (let i = 0; i < arrayResidentsFlat.length; i++) {
-            const response = arrayResidentsFlat[i];
-            arrayResidents.push(response);
-          }
-          setResidents(arrayResidents)
-          setLocations(arrayLocation);
-          setLoading(false);
-        } catch (error) {
-          console.error(error);
-          alert("hubo un error en la conexión al servidor de newsApi");
-        }
-      };
-      request();
-    }, []);
 
   // Paginado Local
   const limit = 15;
@@ -130,37 +116,38 @@ export default function Home({ loading, setLoading }) {
   const last = inicial + limit;
   const dataPaginated = allData.slice(inicial, last);
 
-
-    // Paginado Local residents
-    // const limite = 3;
-    // const initial = 0 + page * limite - limite;
-    // const lastCard = initial + limite;
-    // const residentPaginated = residents.slice(initial, lastCard);
-
-  
-    // let filtroLocation = [];
-    // for (let i = 0; i < dataPaginated.length; i++) {
-    //   const filter = dataPaginated.filter((data) => data.location.name);
-    //   filtroLocation.push(filter)
-    // }
-
-  // const mapResidents = residentPaginated.map((data, id) => (
-  //   <PersonajeCard data={data} />
-  // ));
+    // filtrado por locations
+    // const locationFilter = dataPaginated.filter((data) => (
+    //     data.location.find(({location}) => location.name === "abadango"))
+    //   )
 
 
-  
-  
+
   //map character
-  const mapCharacter = dataPaginated.map((data, id) => (
-    <PersonajeCard data={data} id={id} />
+  const mapCharacter = dataPaginated.map((data) => (
+    <PersonajeCard data={data} />
   ));
 
   return (
     <>
-      <h1 className="text-white text-center my-5 personajes-titulo container border-0 p-1">
-        Personajes
-      </h1>
+      <div>
+            <h1 className="text-white text-center my-5 personajes-titulo container border-0 p-1">
+              Personajes
+            </h1>
+          </div>
+        <div className="mx-auto w-25">
+          <Form.Select
+            aria-label="Default select example"
+            onChange={handleChange}
+          >
+            <option value="">Locations</option>
+            {locations.map((location) => (
+              <option value={location}>{location}</option>
+            ))}
+          </Form.Select>
+        </div>
+       
+
       {loading ? (
         <div className="my-5 text-white spiner d-flex justify-content-center my-5 p-5">
           <Spinner className="fs-1" animation="border" role="status"></Spinner>
@@ -176,14 +163,8 @@ export default function Home({ loading, setLoading }) {
           </div>
           <div className="d-flex justify-content-center">
             <Pagination>
-              <Pagination.Prev
-                onClick={prevPage}
-                disabled={isPrevDisabled}
-                />
-              <Pagination.Item
-                onClick={firstPage}
-                disabled={isPrevDisabled}
-              >
+              <Pagination.Prev onClick={prevPage} disabled={isPrevDisabled} />
+              <Pagination.Item onClick={firstPage} disabled={isPrevDisabled}>
                 {" "}
                 {1}
               </Pagination.Item>
@@ -191,10 +172,7 @@ export default function Home({ loading, setLoading }) {
               <Pagination.Item>{page}</Pagination.Item>
               <Pagination.Ellipsis disabled />
               <Pagination.Item onClick={lastPage}> {56}</Pagination.Item>
-              <Pagination.Next
-                onClick={nextPage}
-                disabled={isNextDisabled}
-              />
+              <Pagination.Next onClick={nextPage} disabled={isNextDisabled} />
             </Pagination>
           </div>
         </div>

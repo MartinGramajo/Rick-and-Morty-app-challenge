@@ -7,7 +7,7 @@ export default function Favorites() {
 
   return (
     <>
-      <div className="d-flex flex-wrap justify-content-between container my-2">
+      <div className="d-flex flex-wrap justify-content-center container my-2">
         {favorites.map((favorite, id) => (
           <Card className="mx-2 my-2 border-5 card-personajes card-personajes-width paytone-one">
             <Card.Header></Card.Header>
