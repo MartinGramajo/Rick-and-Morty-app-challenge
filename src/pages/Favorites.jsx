@@ -7,9 +7,10 @@ export default function Favorites() {
 
   return (
     <>
-      <div className="d-flex flex-wrap justify-content-center container my-2">
+      <div className="container my-2  mx-auto">
+        <div className="d-flex justify-content-center">
         {favorites.map((favorite, id) => (
-          <Card className="mx-2 my-2 border-5 card-personajes card-personajes-width paytone-one">
+          <Card className="mx-auto my-2 border-5 card-personajes card-personajes-width paytone-one">
             <Card.Header></Card.Header>
             <Card.Img
               className="border-card-image"
@@ -32,13 +33,14 @@ export default function Favorites() {
             </Card.Footer>
           </Card>
         ))}
+          </div>
+        </div>
         <div className="mx-auto">
           {!favorites.length && (
             <Card className="card-personajes text-white-50 p-5 mt-5">
               <Card.Title>Aún no tienes ningún favorito</Card.Title>
             </Card>
           )}
-        </div>
       </div>
     </>
   );
