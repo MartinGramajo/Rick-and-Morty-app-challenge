@@ -134,3 +134,8 @@ body {
 .boton-delete{
   background-color:red ;
 }
+
+/*Select locations*/
+.select-response{
+  width: 250px;
+}
