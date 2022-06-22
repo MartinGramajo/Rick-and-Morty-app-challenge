@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import PersonajeCard from "../components/PersonajeCard";
-import { Col, Spinner, Pagination, Form } from "react-bootstrap";
+import { Col, Spinner, Pagination, Form, CloseButton } from "react-bootstrap";
 import { FavoritesContext } from "../context/FavoritesContext";
 
 export default function Home({ loading, setLoading }) {
@@ -75,6 +74,7 @@ export default function Home({ loading, setLoading }) {
       }
     };
     request();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, input]);
 
   //locations
@@ -99,8 +99,10 @@ export default function Home({ loading, setLoading }) {
   };
   useEffect(() => {
     funcion();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allLocations]);
 
+  // Funcion handleChange para tomar el valor del input.
   const handleChange = (e) => {
     e.preventDefault();
     const { value } = e.target;
@@ -108,46 +110,56 @@ export default function Home({ loading, setLoading }) {
     setInput(newInput);
   };
 
+  // filtrado por locations.
+  const locationFilter = allData.filter((item) => item.location.name === input);
 
+  // botón limpiar el filtro.
+  const visibleClear = input ? "" : "d-none" ;
 
-  // Paginado Local
+  const clearSelect = () => {
+    setInput("");
+    setPage(1)
+  };
+
+  // Paginado Local.
   const limit = 15;
   const inicial = 0 + page * limit - limit;
   const last = inicial + limit;
   const dataPaginated = allData.slice(inicial, last);
 
-    // filtrado por locations
-    // const locationFilter = dataPaginated.filter((data) => (
-    //     data.location.find(({location}) => location.name === "abadango"))
-    //   )
-
-
-
-  //map character
-  const mapCharacter = dataPaginated.map((data) => (
-    <PersonajeCard data={data} />
-  ));
-
   return (
     <>
       <div>
-            <h1 className="text-white text-center my-5 personajes-titulo container border-0 p-1">
+        <div className="d-flex justify-content-around container">
+          <div>
+            {" "}
+            <h1 className="text-white text-center mt-3  container border-0 p-1">
               Personajes
             </h1>
           </div>
-        <div className="mx-auto w-25">
-          <Form.Select
-            aria-label="Default select example"
-            onChange={handleChange}
-          >
-            <option value="">Locations</option>
-            {locations.map((location) => (
-              <option value={location}>{location}</option>
-            ))}
-          </Form.Select>
+          <div>
+            <div className="mx-auto container mt-4 d-flex flex-wrap">
+              <Form.Select
+                placeholder="Localizaciones..."
+                aria-label="Filtro por localización"
+                className="select-response border-0"
+                onChange={handleChange}
+              >
+                <option value="">Localizaciones...</option>
+                {locations.map((location) => (
+                  <option value={location}>{location}</option>
+                ))}
+              </Form.Select>
+              <CloseButton
+                onClick={clearSelect}
+                className={`ms-2 mt-1 ${visibleClear}`}
+                variant="white"
+                aria-label="Descartar filtro"
+              />
+            </div>
+          </div>
         </div>
-       
-
+      </div>
       {loading ? (
         <div className="my-5 text-white spiner d-flex justify-content-center my-5 p-5">
           <Spinner className="fs-1" animation="border" role="status"></Spinner>
@@ -159,21 +171,26 @@ export default function Home({ loading, setLoading }) {
             as={Col}
             md="4"
           >
-            {mapCharacter}
+            {input === ""
+              ? dataPaginated.map((data) => <PersonajeCard data={data} />)
+              : locationFilter.map((data) => <PersonajeCard data={data} />)}
+            ;
           </div>
           <div className="d-flex justify-content-center">
-            <Pagination>
-              <Pagination.Prev onClick={prevPage} disabled={isPrevDisabled} />
-              <Pagination.Item onClick={firstPage} disabled={isPrevDisabled}>
-                {" "}
-                {1}
-              </Pagination.Item>
-              <Pagination.Ellipsis disabled />
-              <Pagination.Item>{page}</Pagination.Item>
-              <Pagination.Ellipsis disabled />
-              <Pagination.Item onClick={lastPage}> {56}</Pagination.Item>
-              <Pagination.Next onClick={nextPage} disabled={isNextDisabled} />
-            </Pagination>
+            {input === "" && (
+              <Pagination>
+                <Pagination.Prev onClick={prevPage} disabled={isPrevDisabled} />
+                <Pagination.Item onClick={firstPage} disabled={isPrevDisabled}>
+                  {" "}
+                  {1}
+                </Pagination.Item>
+                <Pagination.Ellipsis disabled />
+                <Pagination.Item>{page}</Pagination.Item>
+                <Pagination.Ellipsis disabled />
+                <Pagination.Item onClick={lastPage}> {56}</Pagination.Item>
+                <Pagination.Next onClick={nextPage} disabled={isNextDisabled} />
+              </Pagination>
+            )}
           </div>
         </div>
       )}
