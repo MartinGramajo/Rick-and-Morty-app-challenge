@@ -1,7 +1,14 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import PersonajeCard from "../components/PersonajeCard";
-import { Col, Spinner, Pagination, Form, CloseButton } from "react-bootstrap";
+import {
+  Col,
+  Spinner,
+  Pagination,
+  Form,
+  CloseButton,
+  Card,
+} from "react-bootstrap";
 import { FavoritesContext } from "../context/FavoritesContext";
 
 export default function Home({ loading, setLoading }) {
@@ -16,27 +23,30 @@ export default function Home({ loading, setLoading }) {
   const isPrevDisabled = page === 1;
   const isNextDisabled = page === 56;
 
+  //Función para volver a la pagina 1 
   const firstPage = (e) => {
     e.preventDefault();
     setPage(1);
   };
-
+//Función para ir a la ultima pagina
   const lastPage = (e) => {
     e.preventDefault();
     setPage(56);
   };
 
+  //Función para regresar de pagina
   const prevPage = (e) => {
     e.preventDefault();
     setPage(page - 1);
   };
-
+  
+//Función para avanzar de pagina
   const nextPage = (e) => {
     e.preventDefault();
     setPage(page + 1);
   };
 
-  //Characters
+  //pedido de Characters
   useEffect(() => {
     setLoading(true);
     const request = async () => {
@@ -77,7 +87,7 @@ export default function Home({ loading, setLoading }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, input]);
 
-  //locations
+  //pedido de locations en la Api
   useEffect(() => {
     const request = async () => {
       const response = await axios.get(
@@ -102,7 +112,7 @@ export default function Home({ loading, setLoading }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allLocations]);
 
-  // Funcion handleChange para tomar el valor del input.
+  // Función handleChange para tomar el valor del input.
   const handleChange = (e) => {
     e.preventDefault();
     const { value } = e.target;
@@ -114,11 +124,12 @@ export default function Home({ loading, setLoading }) {
   const locationFilter = allData.filter((item) => item.location.name === input);
 
   // botón limpiar el filtro.
-  const visibleClear = input ? "" : "d-none" ;
+  const visibleClear = input ? "" : "d-none";
 
+  // Funcion para limpiar el filtro.
   const clearSelect = () => {
     setInput("");
-    setPage(1)
+    setPage(1);
   };
 
   // Paginado Local.
@@ -144,10 +155,11 @@ export default function Home({ loading, setLoading }) {
                 aria-label="Filtro por localización"
                 className="select-response border-0"
                 onChange={handleChange}
+                value={input}
               >
                 <option value="">Localizaciones...</option>
-                {locations.map((location) => (
-                  <option value={location}>{location}</option>
+                {locations.map((location,id) => (
+                  <option key={id} value={location}>{location}</option>
                 ))}
               </Form.Select>
               <CloseButton
@@ -172,10 +184,28 @@ export default function Home({ loading, setLoading }) {
             md="4"
           >
             {input === ""
-              ? dataPaginated.map((data) => <PersonajeCard data={data} />)
-              : locationFilter.map((data) => <PersonajeCard data={data} />)}
+              ? dataPaginated.map((data, id) => <PersonajeCard data={data} key={id} />)
+              : locationFilter.map((data, id) => <PersonajeCard data={data} key={id} />)}
             ;
           </div>
+          {input === "" ? (
+            <div>
+              {locationFilter.length <= 0 && (
+                <Card className="card-personajes text-white-50 p-5 mt-5 d-none">
+                  <Card.Title>Sin resultados</Card.Title>
+                </Card>
+              )}
+            </div>
+          ) : (
+            <div>
+              {locationFilter.length <= 0 && (
+                <Card className="card-personajes  text-white-50 p-5 container mt-5 ">
+                  <Card.Title>Sin resultados</Card.Title>
+                </Card>
+              )}
+            </div>
+          )}
+
           <div className="d-flex justify-content-center">
             {input === "" && (
               <Pagination>

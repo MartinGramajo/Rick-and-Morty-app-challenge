@@ -27,6 +27,7 @@ export default function PersonajeDetalle() {
       setPersonaje(personajeUnico);
     };
     request();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
